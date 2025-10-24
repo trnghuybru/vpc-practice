@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %}Bảng điểm | Quiz{% endblock %} {%
+block content %}
+<div
+  class="max-w-4xl mx-auto bg-white/80 dark:bg-zinc-900/70 backdrop-blur shadow rounded-2xl p-6"
+>
+  <h1 class="text-2xl font-semibold mb-4">Kết quả gần đây</h1>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm border-separate border-spacing-0">
+      <thead>
+        <tr class="text-left bg-zinc-100 dark:bg-zinc-800">
+          <th class="py-3 px-4 rounded-tl-xl">Username</th>
+          <th class="py-3 px-4">Score</th>
+          <th class="py-3 px-4">Total</th>
+          <th class="py-3 px-4 rounded-tr-xl">Time</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
+        {% for r in rows %}
+        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/60">
+          <td class="py-3 px-4 font-medium">{{ r.username }}</td>
+          <td class="py-3 px-4">{{ r.score }}</td>
+          <td class="py-3 px-4">{{ r.total }}</td>
+          <td class="py-3 px-4 text-zinc-500">{{ r.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="mt-6">
+    <a
+      class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 transition"
+      href="{{ url_for('index') }}"
+      >Làm lại</a
+    >
+  </div>
+</div>
+{% endblock %}

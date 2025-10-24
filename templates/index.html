@@ -1,46 +1,64 @@
-<!doctype html>
-<html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{% block title %}Quiz{% endblock %}</title>
+{% extends "base.html" %} {% block title %}Làm bài | Quiz{% endblock %} {% block
+content %}
+<div
+  class="max-w-3xl mx-auto bg-white/80 dark:bg-zinc-900/70 backdrop-blur shadow rounded-2xl p-6"
+>
+  <h1 class="text-2xl font-semibold mb-4">Mini Quiz</h1>
 
-    <!-- Fonts (tuỳ) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <form method="POST" class="space-y-6">
+    <div>
+      <label class="block mb-1 font-medium">Username</label>
+      <input
+        name="username"
+        class="border rounded-xl px-3 py-2 w-full hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+        placeholder="Nhập tên của bạn"
+        required
+      />
+    </div>
 
-    <!-- Tailwind Play CDN (NHANH) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      // tuỳ chọn: mở dark mode theo hệ điều hành & có thể extend theme nhẹ
-      tailwind.config = {
-        darkMode: 'media',
-        theme: { extend: {} },
-        corePlugins: { preflight: true }
-      }
-    </script>
-  </head>
-  <body class="min-h-screen bg-gradient-to-b from-sky-50 to-indigo-50 dark:from-zinc-900 dark:to-zinc-950 text-zinc-800 dark:text-zinc-100" style="font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">
-    <header class="container mx-auto px-4 py-6">
-      <div class="flex items-center justify-between">
-        <a href="{{ url_for('index') }}" class="text-2xl font-bold">
-          <span class="text-indigo-600">Mini</span> Quiz
-        </a>
-        <nav class="text-sm space-x-4">
-          <a class="hover:underline" href="{{ url_for('index') }}">Làm bài</a>
-          <a class="hover:underline" href="{{ url_for('scores') }}">Bảng điểm</a>
-          <a class="hover:underline" href="/health">Health</a>
-        </nav>
-      </div>
-    </header>
+    <div class="space-y-5">
+      {% for q in questions %}
+      <fieldset class="border rounded-2xl p-4">
+        <legend
+          class="px-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300"
+        >
+          Câu {{ loop.index }}:
+        </legend>
+        <p class="font-medium mb-3">{{ q.question }}</p>
 
-    <main class="container mx-auto px-4 pb-16">
-      {% block content %}{% endblock %}
-    </main>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {% for opt,label in
+          [('A',q.option_a),('B',q.option_b),('C',q.option_c),('D',q.option_d)]
+          %}
+          <label
+            class="flex gap-2 items-start bg-zinc-50 dark:bg-zinc-800/60 rounded-xl p-3 hover:ring-2 hover:ring-indigo-300 cursor-pointer"
+          >
+            <input
+              type="radio"
+              name="q_{{ q.id }}"
+              value="{{opt}}"
+              required
+              class="mt-1"
+            />
+            <span><span class="font-semibold">({{opt}})</span> {{label}}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      {% endfor %}
+    </div>
 
-    <footer class="container mx-auto px-4 pb-10 text-xs text-zinc-500">
-      <p>© {{ 2025 }} Quiz Demo. All rights reserved.</p>
-    </footer>
-  </body>
-</html>
+    <div class="flex items-center gap-3">
+      <button
+        type="submit"
+        class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 transition"
+      >
+        Nộp bài
+      </button>
+      <a href="{{ url_for('scores') }}" class="text-indigo-600 hover:underline"
+        >Xem bảng điểm</a
+      >
+    </div>
+  </form>
+</div>
+{% endblock %}
